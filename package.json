@@ -1,8 +1,8 @@
 {
-  "name": "discord-getting-started",
+  "name": "discord-bot-that-pings-users-when-new-jobs",
   "private": true,
   "version": "1.0.0",
-  "description": "Discord example app",
+  "description": "Discord bot that pings users when new jobs pop up in the #jobs-board thread",
   "main": "app.js",
   "type": "module",
   "engines": {

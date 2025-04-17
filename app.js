@@ -1,3 +1,55 @@
+// import express from 'express';
+// import { verifyKeyMiddleware } from 'discord-interactions';
+// import { DiscordRequest } from './utils.js';
+
+// const app = express();
+// const PORT = process.env.PORT || 3000;
+
+// app.get('/', verifyKeyMiddleware(process.env.PUBLIC_KEY), async function (req, res) {
+//   const { id, type, data } = req.body;
+
+//   console.log(id, type, data);
+
+//   try {
+//     if (type === InteractionType.PING) {
+//       return res.send({ type: InteractionResponseType.PONG });
+//     }
+
+//     console.log(id, type, data);
+    
+//     const endpoint = `guilds/934455195725860934/channels`;
+//     const channels = await DiscordRequest(endpoint).then((res) => res.json());
+
+//     return res.json(channels);
+//   }
+//   catch {
+//     console.error('unknown interaction type', type);
+//     return res.status(400).json({ error: 'unknown interaction type' });
+//   }
+// });
+
+// app.post('/', verifyKeyMiddleware(process.env.PUBLIC_KEY), async function (req, res) {
+//   const { id, type, data } = req.body;
+
+//   try {
+//     console.log(id, type, data);
+
+//     const endpoint = `guilds/934455195725860934/channels`;
+//     const channels = await DiscordRequest(endpoint).then((res) => res.json());
+
+//     return res.json(channels);
+//   }
+//   catch {
+//     console.error('unknown interaction type', type);
+//     return res.status(400).json({ error: 'unknown interaction type' });
+//   }
+// });
+
+
+// app.listen(PORT, () => {
+//   console.log('Listening on port', PORT);
+// });
+
 import 'dotenv/config';
 import express from 'express';
 import {
@@ -59,6 +111,8 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
   console.error('unknown interaction type', type);
   return res.status(400).json({ error: 'unknown interaction type' });
 });
+
+//app.get('/guilds/{guild.id}/channels')
 
 app.listen(PORT, () => {
   console.log('Listening on port', PORT);
