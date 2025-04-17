@@ -35,11 +35,22 @@ export async function GetGuildChannels(guildId) {
   }
 }
 
+export async function GetLastMessage(channelId, q = '') {
+  const endpoint = `channels/${channelId}/messages`;
+
+  try {
+    return await DiscordRequest(`${endpoint}?limit=1&${q}`).then((res) => res.json());
+  }
+  catch (error) {
+    console.error(err);
+  }
+}
+
 export async function SendMessage(channelId, commands = {}, q = '') {
   const endpoint = `channels/${channelId}/messages`
 
   try {
-    const message = await DiscordRequest(`${endpoint}?limit=1&${q}`).then((res) => res.json())
+    const message = await GetLastMessage(channelId);
 
     if (message.length > 0) {
       return await DiscordRequest(endpoint, {
@@ -67,12 +78,12 @@ export async function SendMessage(channelId, commands = {}, q = '') {
 //   }
 // }
 
-// // Simple method that returns a random emoji from list
-// export function getRandomEmoji() {
-//   const emojiList = ['😭','😄','😌','🤓','😎','😤','🤖','😶‍🌫️','🌏','📸','💿','👋','🌊','✨'];
-//   return emojiList[Math.floor(Math.random() * emojiList.length)];
-// }
+// Simple method that returns a random emoji from list
+export function getRandomEmoji() {
+  const emojiList = ['😭','😄','😌','🤓','😎','😤','🤖','😶‍🌫️','🌏','📸','💿','👋','🌊','✨'];
+  return emojiList[Math.floor(Math.random() * emojiList.length)];
+}
 
-// export function capitalize(str) {
-//   return str.charAt(0).toUpperCase() + str.slice(1);
-// }
+export function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
