@@ -66,6 +66,9 @@ web_modules/
 # Optional REPL history
 .node_repl_history
 
+# Optional FreeFileSync sync database file
+sync.ffs_db
+
 # Output of 'npm pack'
 *.tgz
 
