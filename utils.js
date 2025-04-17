@@ -1,6 +1,6 @@
 import 'dotenv/config';
 
-export async function DiscordRequest(endpoint, options) {
+export async function DiscordRequest(endpoint, options = {}) {
   // append endpoint to root API URL
   const url = 'https://discord.com/api/v10/' + endpoint;
   // Stringify payloads
@@ -12,6 +12,7 @@ export async function DiscordRequest(endpoint, options) {
       'Content-Type': 'application/json; charset=UTF-8',
       'User-Agent': 'DiscordBot (https://github.com/discord/discord-example-app, 1.0.0)',
     },
+    method: 'GET',
     ...options
   });
   // throw API errors
