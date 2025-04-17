@@ -25,24 +25,54 @@ export async function DiscordRequest(endpoint, options = {}) {
   return res;
 }
 
-export async function InstallGlobalCommands(appId, commands) {
-  // API endpoint to overwrite global commands
-  const endpoint = `applications/${appId}/commands`;
+export async function GetGuildChannels(guildId) {
+  const endpoint = `guilds/${guildId}/channels`;
 
   try {
-    // This is calling the bulk overwrite endpoint: https://discord.com/developers/docs/interactions/application-commands#bulk-overwrite-global-application-commands
-    await DiscordRequest(endpoint, { method: 'PUT', body: commands });
+    return await DiscordRequest(endpoint).then((res) => res.json());
   } catch (err) {
     console.error(err);
   }
 }
 
-// Simple method that returns a random emoji from list
-export function getRandomEmoji() {
-  const emojiList = ['😭','😄','😌','🤓','😎','😤','🤖','😶‍🌫️','🌏','📸','💿','👋','🌊','✨'];
-  return emojiList[Math.floor(Math.random() * emojiList.length)];
+export async function SendMessage(channelId, commands = {}, q = '') {
+  const endpoint = `channels/${channelId}/messages`
+
+  try {
+    const message = await DiscordRequest(`${endpoint}?limit=1&${q}`).then((res) => res.json())
+
+    if (message.length > 0) {
+      return await DiscordRequest(endpoint, {
+        method: 'POST',
+        body: {
+          ...commands,
+          content: 'cheese!!!!'
+        }
+      })
+    }
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-export function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
+// export async function InstallGlobalCommands(appId, commands = {}) {
+//   // API endpoint to overwrite global commands
+//   const endpoint = `applications/${appId}/commands`;
+
+//   try {
+//     // This is calling the bulk overwrite endpoint: https://discord.com/developers/docs/interactions/application-commands#bulk-overwrite-global-application-commands
+//     await DiscordRequest(endpoint, { method: 'PUT', body: commands });
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
+
+// // Simple method that returns a random emoji from list
+// export function getRandomEmoji() {
+//   const emojiList = ['😭','😄','😌','🤓','😎','😤','🤖','😶‍🌫️','🌏','📸','💿','👋','🌊','✨'];
+//   return emojiList[Math.floor(Math.random() * emojiList.length)];
+// }
+
+// export function capitalize(str) {
+//   return str.charAt(0).toUpperCase() + str.slice(1);
+// }

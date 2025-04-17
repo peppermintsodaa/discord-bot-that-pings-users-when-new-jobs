@@ -1,11 +1,11 @@
-import { DiscordRequest } from "./utils.js";
+import { GetGuildChannels, SendMessage } from "./utils.js";
 
-const endpoint = `guilds/934455195725860934/channels`;
+const res = await GetGuildChannels('934455195725860934')
+  .then(async (channels) => {
+    const c = channels.filter((c) => c.name === 'i-like-cheese');
+    
+    return await SendMessage(c.at(0).id);
+  })
+  .then((res) => res.json());
 
-try {
-  const res = await DiscordRequest(endpoint).then((res) => res.json());
-
-  console.log(res);
-} catch (err) {
-  console.error(err);
-}
+console.log(res);
