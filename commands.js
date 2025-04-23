@@ -24,9 +24,13 @@ export const retriveChannelAndRoleInfo = async (client) => {
   }
 
   try {
-    const guild = await client.guilds.fetch(SERVER_ID);
-    const channels = await guild.channels.fetch();
-    const roles = await guild.roles.fetch();
+    const { channels, roles } = await client.guilds.fetch(SERVER_ID)
+      .then(async (guild) => {
+        const channels = await guild.channels.fetch();
+        const roles = await guild.roles.fetch();
+
+        return { channels, roles };
+      });
 
     // get id for job ping channel
     idMappings.pingChannel = channels.filter((c) => c.name === config.pingChannel).at(0).id;
