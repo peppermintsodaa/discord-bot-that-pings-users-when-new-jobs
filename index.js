@@ -30,11 +30,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
 });
 
 client.on(Events.ThreadCreate, async (thread) => {
-  // retrieve appropriate IDs
-  const { pingChannel, jobBoards, jobPingRoles } = await retriveChannelAndRoleInfo(client);
-
   // if thread was not made in the job board channels
   if (!config.jobThreads.includes(thread.name)) return;
+
+  // retrieve appropriate IDs
+  const { pingChannel, jobBoards, jobPingRoles } = await retriveChannelAndRoleInfo(client);
 
   // retrieve info about job ping channel
   const jobPingChannel = await client.channels.fetch(pingChannel);

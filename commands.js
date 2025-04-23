@@ -1,5 +1,5 @@
 import { REST, Routes } from 'discord.js';
-import { TOKEN } from './env.js';
+import { SERVER_ID, TOKEN } from './env.js';
 import config from './config.js';
 
 const rest = new REST({ version: '10' }).setToken(TOKEN);
@@ -24,11 +24,12 @@ export const retriveChannelAndRoleInfo = async (client) => {
   }
 
   try {
-    const channels = await client.guild.channels.fetch();
-    const roles = await client.guild.roles.fetch();
+    const guild = await client.guilds.fetch(SERVER_ID);
+    const channels = await guild.channels.fetch();
+    const roles = await guild.roles.fetch();
 
     // get id for job ping channel
-    idMappings.jobPingChannel = channels.filter((c) => c.name === config.pingChannel).at(0).id;
+    idMappings.pingChannel = channels.filter((c) => c.name === config.pingChannel).at(0).id;
 
     // get ids for job boards
     const jobBoardThreads = channels.filter((c) => config.jobThreads.includes(c.name));
