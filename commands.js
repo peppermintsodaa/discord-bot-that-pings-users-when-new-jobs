@@ -42,8 +42,8 @@ export const retriveChannelAndRoleInfo = async (client) => {
     });
 
     // get ids for roles
-    const relevantRoles = roles.filter((r) => config.jobRoles.includes(r.name));
-    config.jobRoles.forEach((jr) => {
+    const relevantRoles = roles.filter((r) => config.jobPingRoles.includes(r.name));
+    config.jobPingRoles.forEach((jr) => {
       idMappings.jobPingRoles[jr] = relevantRoles.filter((r) => r.name === jr).at(0).id;
     });
 
