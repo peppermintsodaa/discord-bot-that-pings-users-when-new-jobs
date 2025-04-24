@@ -36,11 +36,17 @@ client.on(Events.ThreadCreate, async (thread) => {
   // retrieve appropriate IDs
   const { pingChannel, jobBoards, jobPingRoles } = await retriveChannelAndRoleInfo(client);
 
+  // do not proceed further if any of them are empty
+  if (pingChannel === '' || Object.keys(jobBoards).length === 0 || Object.keys(jobBoards).length === 0) return;
+
   // retrieve info about job ping channel
   const jobPingChannel = await client.channels.fetch(pingChannel);
 
+  // get info about tags
+  const tags = thread.appliedTags.map((t) => thread.parent.availableTags.find(tt => tt.id === t));
+
   // retrieve relevant tag to ping users by
-  const relevantTags = thread.appliedTags.filter((tag) => {
+  const relevantTags = tags.filter((tag) => {
     const tagLower = tag.name.toLowerCase();
     
     return tagLower.includes('intern') 
@@ -69,7 +75,7 @@ client.on(Events.ThreadCreate, async (thread) => {
       roleName = 'experience';
     }
 
-    const role = Object.keys(jobPingRoles).filter((r) => r.includes(roleName));
+    const role = Object.keys(jobPingRoles).find((r) => r.includes(roleName));
     rolesToPing += `<@&${jobPingRoles[role]}> `;
   })
 

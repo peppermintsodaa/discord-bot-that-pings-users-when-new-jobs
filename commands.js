@@ -33,18 +33,18 @@ export const retriveChannelAndRoleInfo = async (client) => {
       });
 
     // get id for job ping channel
-    idMappings.pingChannel = channels.filter((c) => c.name === config.pingChannel).at(0).id;
+    idMappings.pingChannel = channels.find((c) => c.name === config.pingChannel).id;
 
     // get ids for job boards
     const jobBoardThreads = channels.filter((c) => config.jobThreads.includes(c.name));
     config.jobThreads.forEach((jt) => {
-      idMappings.jobBoards[jt] = jobBoardThreads.filter((j) => j.name === jt).at(0).id;
+      idMappings.jobBoards[jt] = jobBoardThreads.find((j) => j.name === jt).id;
     });
 
     // get ids for roles
     const relevantRoles = roles.filter((r) => config.jobPingRoles.includes(r.name));
     config.jobPingRoles.forEach((jr) => {
-      idMappings.jobPingRoles[jr] = relevantRoles.filter((r) => r.name === jr).at(0).id;
+      idMappings.jobPingRoles[jr] = relevantRoles.find((r) => r.name === jr).id;
     });
 
     return idMappings;
