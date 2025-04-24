@@ -6,17 +6,23 @@ import config from './config.js';
 const commands = [
   {
     name: 'ping',
-    description: 'Check status of bot',
-  },
+    description: 'Check status of bot'
+  }
 ];
 
 // deploy/reload commands before starting
 deployCommands(CLIENT_ID, commands);
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent ] });
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent
+  ]
+});
 
 client.once(Events.ClientReady, () => {
-	console.log(`Bot is up! Current uptime is at ${new Date()}`);
+  console.log(`Bot is up! Current uptime is at ${new Date()}`);
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
@@ -24,8 +30,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
   if (interaction.commandName === 'ping') {
     const startTime = Date.now();
-    
-    await interaction.reply(`Pong! Bot responded in ${Date.now() - startTime}ms`);
+
+    await interaction.reply(
+      `Pong! Bot responded in ${Date.now() - startTime}ms`
+    );
   }
 });
 
@@ -34,26 +42,36 @@ client.on(Events.ThreadCreate, async (thread) => {
   if (!config.jobThreads.includes(thread.name)) return;
 
   // retrieve appropriate IDs
-  const { pingChannel, jobBoards, jobPingRoles } = await retriveChannelAndRoleInfo(client);
+  const { pingChannel, jobBoards, jobPingRoles } =
+    await retriveChannelAndRoleInfo(client);
 
   // do not proceed further if any of them are empty
-  if (pingChannel === '' || Object.keys(jobBoards).length === 0 || Object.keys(jobBoards).length === 0) return;
+  if (
+    pingChannel === '' ||
+    Object.keys(jobBoards).length === 0 ||
+    Object.keys(jobBoards).length === 0
+  )
+    return;
 
   // retrieve info about job ping channel
   const jobPingChannel = await client.channels.fetch(pingChannel);
 
   // get info about tags
-  const tags = thread.appliedTags.map((t) => thread.parent.availableTags.find(tt => tt.id === t));
+  const tags = thread.appliedTags.map((t) =>
+    thread.parent.availableTags.find((tt) => tt.id === t)
+  );
 
   // retrieve relevant tag to ping users by
   const relevantTags = tags.filter((tag) => {
     const tagLower = tag.name.toLowerCase();
-    
-    return tagLower.includes('intern') 
-    || tagLower.includes('student')
-    || tagLower.includes('grad') 
-    || tagLower.includes('junior') 
-    || tagLower.includes('experience');
+
+    return (
+      tagLower.includes('intern') ||
+      tagLower.includes('student') ||
+      tagLower.includes('grad') ||
+      tagLower.includes('junior') ||
+      tagLower.includes('experience')
+    );
   });
 
   // append pinging role to message
@@ -77,10 +95,12 @@ client.on(Events.ThreadCreate, async (thread) => {
 
     const role = Object.keys(jobPingRoles).find((r) => r.includes(roleName));
     rolesToPing += `<@&${jobPingRoles[role]}> `;
-  })
+  });
 
   // retrieve ID for opportunities channels
-  const opportunityIds = Object.keys(jobBoards).filter((b) => b.includes('opportunit'));
+  const opportunityIds = Object.keys(jobBoards).filter((b) =>
+    b.includes('opportunit')
+  );
 
   // send message
   const message = `## 🗞️ **HEAR HEAR!** 🗞️
@@ -88,10 +108,8 @@ client.on(Events.ThreadCreate, async (thread) => {
   
   ${rolesToPing}https://discord.com/channels/${thread.parentId}/${thread.id}`;
 
-  jobPingChannel.send(message)
-    .then(console.log)
-    .catch(console.error);
-})
+  jobPingChannel.send(message).then(console.log).catch(console.error);
+});
 
 // log in to Discord
 client.login(TOKEN);
